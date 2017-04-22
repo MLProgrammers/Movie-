@@ -128,7 +128,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Movies> {
         viewHolder.moreDetailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getContext().getApplicationContext(), MovieDetail.class);
+                Intent i = new Intent(getContext().getApplicationContext(), Details.class);
                 i.putExtra("movie", item);
                 getContext().startActivity(i);
             }
