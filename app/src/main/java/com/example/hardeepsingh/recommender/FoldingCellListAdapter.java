@@ -3,12 +3,16 @@ package com.example.hardeepsingh.recommender;
 /**
  * Created by hardeepsingh on 4/14/17.
  */
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.graphics.Palette;
+import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,20 +23,29 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 
 
-public class FoldingCellListAdapter extends ArrayAdapter<Movies> {
+public class FoldingCellListAdapter extends ArrayAdapter<Movie> {
 
     private HashSet<Integer> unfoldedIndexes = new HashSet<>();
-    private ArrayList<Movies> moviesList;
+    private ArrayList<Movie> moviesList;
+    private ImageLoader imageLoader = Singleton.getInstance().getImageLoader();
+    private URLHandler urlHandler = new URLHandler();
 
 
-    public FoldingCellListAdapter(Context context, ArrayList<Movies> movies) {
+    public FoldingCellListAdapter(Context context, ArrayList<Movie> movies) {
         super(context, 0, movies);
 
         //Clone to filter through list
@@ -43,7 +56,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Movies> {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         // get item for selected view
-        final Movies item = getItem(position);
+        final Movie item = getItem(position);
 
         // if cell is exists - reuse it, if not - create the new one from resource
         FoldingCell cell = (FoldingCell) convertView;
@@ -89,51 +102,61 @@ public class FoldingCellListAdapter extends ArrayAdapter<Movies> {
             viewHolder = (ViewHolder) cell.getTag();
         }
 
+        //Split Date
+        String [] dateSplit = item.getReleaseDate().split(", ");
+
+
         // bind folded data from selected element to view through view holder
-        viewHolder.fold_name_letter.setText(item.getName().toUpperCase().substring(0,1));
-        viewHolder.fold_date_month.setText(item.getMonth_date());
-        viewHolder.fold_year.setText(item.getYear());
-        viewHolder.fold_name.setText(item.getName());
-        viewHolder.fold_genre.setText(item.getGenre());
-        viewHolder.fold_rating.setText(item.getRating());
-        viewHolder.fold_collection.setText(item.getBoxOfficeCollection());
+        viewHolder.fold_name_letter.setText(item.getTitle().toUpperCase().substring(0,1));
+        viewHolder.fold_date_month.setText(dateSplit[0]);
+        viewHolder.fold_year.setText(dateSplit[1]);
+        viewHolder.fold_name.setText(item.getTitle());
+        viewHolder.fold_genre.setText(item.getGenreHash().values().toString());
+        viewHolder.fold_rating.setText("PG - 12");
+        viewHolder.fold_collection.setText("$300 MIL");
 
         // bind unfolded data from selected element to view through view holder
-        viewHolder.unfold_top_name.setText(item.getName().toUpperCase().substring(0,1));
-        viewHolder.head_image.setImageDrawable(getContext().getResources().getDrawable(item.getMovieDrawableID()));
-        viewHolder.unfold_name.setText(item.getName());
-        viewHolder.unfold_rating.setText(item.getRating());
-        viewHolder.unfold_genre.setText(item.getGenre());
-        viewHolder.unfold_date.setText(item.getMonth_date() + ", " + item.getYear());
-        viewHolder.unfold_collection.setText(item.getBoxOfficeCollection());
+        viewHolder.unfold_top_name.setText(item.getTitle().toUpperCase().substring(0,1));
+        viewHolder.unfold_name.setText(item.getTitle());
+        viewHolder.unfold_rating.setText("PG - 12");
+        viewHolder.unfold_genre.setText(item.getGenreHash().values().toString());
+        viewHolder.unfold_date.setText(item.getReleaseDate());
+        viewHolder.unfold_collection.setText("$300 MIL");
 
-
-
-
-        //Get Image Palette for background color
-        Bitmap myBitmap = BitmapFactory.decodeResource(getContext().getResources(), item.getMovieDrawableID());
-        if (myBitmap != null && !myBitmap.isRecycled()) {
-            Palette.from(myBitmap).generate(new Palette.PaletteAsyncListener() {
-                @Override
-                public void onGenerated(Palette palette) {
-                    int defaultColor = 0x000000;
-                    viewHolder.fold_background.setBackgroundColor(palette.getVibrantColor(defaultColor));
-                    viewHolder.unfold_background.setBackgroundColor(palette.getVibrantColor(defaultColor));
+        //Set Pallete Color and Image
+        imageLoader.get(urlHandler.getImageUrl(item.getBackdropPath(), "w300"), new ImageLoader.ImageListener() {
+            @Override
+            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                Bitmap myBitmap = response.getBitmap();
+                if (myBitmap != null && !myBitmap.isRecycled()) {
+                    viewHolder.head_image.setImageBitmap(myBitmap);
+                    Palette.from(myBitmap).generate(new Palette.PaletteAsyncListener() {
+                        @Override
+                        public void onGenerated(Palette palette) {
+                            int defaultColor = 0x000000;
+                            viewHolder.fold_background.setBackgroundColor(palette.getVibrantColor(defaultColor));
+                            viewHolder.unfold_background.setBackgroundColor(palette.getVibrantColor(defaultColor));
+                        }
+                    });
                 }
-            });
-        }
-
+            }
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("Folding Cell Image Error: ", error.getMessage());
+            }
+        });
 
         //Assign an OnClickListener to Button
         viewHolder.moreDetailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getContext().getApplicationContext(), Details.class);
-                i.putExtra("movie", item);
-                getContext().startActivity(i);
+                Intent intent = new Intent(getContext().getApplicationContext(), Details.class);
+                intent.putExtra("movie", item);
+                Activity activity = (Activity) getContext();
+                activity.startActivity(intent);
+                activity.overridePendingTransition(R.anim.slide_down, R.anim.fade_out);
             }
         });
-
 
         return cell;
     }
@@ -192,9 +215,9 @@ public class FoldingCellListAdapter extends ArrayAdapter<Movies> {
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults filterResults = new FilterResults();
             if(constraint != null) {
-                ArrayList<Movies> suggestions =  new ArrayList<Movies>();
-                for(Movies movie: moviesList) {
-                    if(movie.getName().toLowerCase().startsWith(constraint.toString().toLowerCase())) {
+                ArrayList<Movie> suggestions =  new ArrayList<Movie>();
+                for(Movie movie: moviesList) {
+                    if(movie.getTitle().toLowerCase().startsWith(constraint.toString().toLowerCase())) {
                         suggestions.add(movie);
                     }
                 }
@@ -208,7 +231,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Movies> {
         protected void publishResults(CharSequence constraint, FilterResults results) {
             clear();
             if(results != null && results.count > 0) {
-                addAll((ArrayList<Movies>) results.values);
+                addAll((ArrayList<Movie>) results.values);
             } else {
                 addAll(moviesList);
             }

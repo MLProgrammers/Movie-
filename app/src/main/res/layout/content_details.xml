@@ -3,31 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.hardeepsingh.recommender.Details"
     tools:showIn="@layout/activity_details">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/bgContent"
         android:orientation="vertical"
-        android:weightSum="2">
+        android:weightSum="2.5">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1.2"
+            android:layout_weight="1.02"
             android:orientation="vertical"
             android:padding="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="66dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
+                <!--Name-->
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -55,6 +56,7 @@
                         android:typeface="serif" />
                 </RelativeLayout>
 
+                <!--Date-->
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -92,10 +94,11 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="175dp"
+                android:layout_height="150dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
+                <!--Rating-->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -243,6 +246,7 @@
                     </RelativeLayout>
                 </LinearLayout>
 
+                <!--Divider-->
                 <ImageView
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
@@ -250,6 +254,7 @@
                     android:layout_marginRight="8dp"
                     android:src="@color/contentDividerLine" />
 
+                <!--Genre-->
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -272,7 +277,7 @@
                         android:layout_below="@id/label_genre"
                         android:inputType="textMultiLine"
                         android:scrollbars="vertical"
-                        android:text="Action\nAdventure\nDrama\nComedy\nRomance\nHorror\nThriller"
+                        android:text="Action\nAdventure\nDrama\nComedy"
                         android:textColor="@color/mainTextColor"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -284,17 +289,52 @@
 
         <!-- divider line -->
         <ImageView
+            android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="2dp"
             android:src="@color/contentDividerLine" />
 
+        <!--Description-->
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp">
+
+            <TextView
+                android:id="@+id/content_detail_title"
+                style="@style/ContentMainBadgeTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:text="Description" />
+
+
+            <TextView
+                android:id="@+id/detail_description"
+                android:layout_width="match_parent"
+                android:maxLines="5"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/content_detail_title" />
+        </RelativeLayout>
+
+        <!-- divider line -->
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="2dp"
+            android:src="@color/contentDividerLine" />
+
+        <!--Grid View-->
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:layout_weight="0.8">
+            android:layout_weight="1.02">
 
             <TextView
                 android:id="@+id/content_name_title"

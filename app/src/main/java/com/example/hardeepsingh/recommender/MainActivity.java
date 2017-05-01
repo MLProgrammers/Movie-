@@ -2,7 +2,10 @@ package com.example.hardeepsingh.recommender;
 
 import android.content.ClipData;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.MediaRouter;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -14,6 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
@@ -22,6 +27,7 @@ import android.widget.Toast;
 import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -30,7 +36,13 @@ public class MainActivity extends AppCompatActivity
     FoldingCellListAdapter adapter;
     AutoCompleteTextView autoCompleteTextView;
 
-    ArrayList<Movies> moviesList = new ArrayList<>();
+
+    //Cache
+    SharedPreferences prefs;
+    URLHandler urlHandler = new URLHandler();
+
+    ArrayList<Movie> moviesList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,20 +50,17 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Fill up the list
-        moviesList.add(new Movies("Avengers", "Action\nAdventure", "Apr 12 2016", "PG-13", "$300 Million", "8.5", R.drawable.avenger));
-        moviesList.add(new Movies("Shrek", "Adventure\nComedy", "Dec 07 2009", "E", "$92 Million", "7.5", R.drawable.shrek));
-        moviesList.add(new Movies("Star Trek", "Adventure\nSci-Fi", "Mar 07 2015", "R", "$100 Million", "7", R.drawable.startrek));
-        moviesList.add(new Movies("Star Wars", "Adventure\nSci-Fi", "Jun 19 2004", "PG", "$68 Million", "6.5", R.drawable.starwars));
-        moviesList.add(new Movies("Dark Knight", "Action\nAdventure", "Jul 04 2014", "PG-13", "$600 Million", "9.5", R.drawable.knight));
+
+        //Initialize Preferences
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        IntialSetup intialSetup = new IntialSetup(this);
 
         //Initialize Variable
         autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
         autoCompleteTextView.setDropDownHeight(0);
         listView = (ListView) findViewById(R.id.mainListView);
-        adapter = new FoldingCellListAdapter(this, moviesList);
-        listView.setAdapter(adapter);
-        autoCompleteTextView.setAdapter(adapter);
+
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -61,6 +70,32 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+
+        //Get Data
+        final DatabaseAPI databaseApi = new DatabaseAPI();
+        databaseApi.makeRequest(urlHandler.getNowPopularUrl(), new ResponseInterface() {
+            @Override
+            public void onDataRecieved(String json) {
+                moviesList = databaseApi.parseMovies(json);
+
+                //Collect All Movie Ratings
+                for(final Movie m: moviesList) {
+                   databaseApi.makeRequest(urlHandler.getOmdbRatingUrl(m.getTitle()), new ResponseInterface() {
+                       @Override
+                       public void onDataRecieved(String json) {
+                           //Set Rating and Genre
+                           m.setRatings(databaseApi.parseRating(json));
+
+                       }
+                   });
+                    m.setGenreHash(databaseApi.parseGenre(prefs.getString("genre", null)));
+                }
+
+                adapter = new FoldingCellListAdapter(MainActivity.this, moviesList);
+                listView.setAdapter(adapter);
+                autoCompleteTextView.setAdapter(adapter);
+            }
+        });
 
         //Floating Button Handling
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -117,4 +152,5 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

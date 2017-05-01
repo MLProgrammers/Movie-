@@ -1,6 +1,8 @@
 package com.example.hardeepsingh.recommender;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -17,12 +23,14 @@ import java.util.ArrayList;
 
 class GridViewAdapter extends RecyclerView.Adapter<GridViewAdapter.ViewHolder> {
 
-    ArrayList<Movies> moviesList;
-    Context context;
+    private ArrayList<Movie> moviesList;
+    private ImageLoader imageLoader = Singleton.getInstance().getImageLoader();
+    private URLHandler urlHandler = new URLHandler();
+    private Context context;
 
-    public GridViewAdapter(Context context, ArrayList<Movies> moviesList) {
-        this.moviesList = moviesList;
+    public GridViewAdapter(Context context, ArrayList<Movie> moviesList) {
         this.context = context;
+        this.moviesList = moviesList;
     }
 
     @Override
@@ -33,11 +41,31 @@ class GridViewAdapter extends RecyclerView.Adapter<GridViewAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(GridViewAdapter.ViewHolder holder, int position) {
-        Movies m = moviesList.get(position);
-        holder.recommendImage.setImageDrawable(context.getResources().getDrawable(m.getMovieDrawableID()));
-        holder.recommendMovieName.setText(m.getName());
+    public void onBindViewHolder(final GridViewAdapter.ViewHolder holder, final int position) {
+        Movie m = moviesList.get(position);
+        holder.recommendMovieName.setText(m.getTitle());
+        imageLoader.get(urlHandler.getImageUrl(m.getBackdropPath(), "w185"), new ImageLoader.ImageListener() {
+            @Override
+            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                holder.recommendImage.setImageBitmap(response.getBitmap());
+            }
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("Grid View Image Error: ", error.getMessage());
+            }
+        });
 
+        //Handle Click
+        holder.recommendImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context.getApplicationContext(), Details.class);
+                intent.putExtra("movie", moviesList.get(position));
+                Activity activity = (Activity) context;
+                activity.startActivity(intent);
+                activity.overridePendingTransition(R.anim.slide_down, R.anim.fade_out);
+            }
+        });
     }
 
     @Override
