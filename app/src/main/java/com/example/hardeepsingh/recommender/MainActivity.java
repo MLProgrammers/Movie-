@@ -1,5 +1,6 @@
 package com.example.hardeepsingh.recommender;
 
+import android.app.SearchManager;
 import android.content.ClipData;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +9,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -34,8 +37,6 @@ public class MainActivity extends AppCompatActivity
 
     ListView listView;
     FoldingCellListAdapter adapter;
-    AutoCompleteTextView autoCompleteTextView;
-
 
     //Cache
     SharedPreferences prefs;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
@@ -56,12 +57,9 @@ public class MainActivity extends AppCompatActivity
         IntialSetup intialSetup = new IntialSetup(this);
 
         //Initialize Variable
-        autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextView);
-        autoCompleteTextView.setDropDownHeight(0);
         listView = (ListView) findViewById(R.id.mainListView);
 
-
-
+        //Initialize ListView
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
@@ -91,9 +89,9 @@ public class MainActivity extends AppCompatActivity
                     m.setGenreHash(databaseApi.parseGenre(prefs.getString("genre", null)));
                 }
 
+                //Set the list and Update
                 adapter = new FoldingCellListAdapter(MainActivity.this, moviesList);
                 listView.setAdapter(adapter);
-                autoCompleteTextView.setAdapter(adapter);
             }
         });
 
@@ -126,6 +124,31 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+
+        // Retrieve the SearchView and plug it into SearchManager
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.main_search));
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                adapter.notifyDataSetChanged();
+                return true;
+            }
+        });
+        return true;
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

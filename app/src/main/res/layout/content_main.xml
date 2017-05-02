@@ -12,15 +12,6 @@
     tools:showIn="@layout/app_bar_main">
 
 
-    <AutoCompleteTextView
-        android:id="@+id/autoCompleteTextView"
-        android:layout_width="match_parent"
-        android:padding="10dp"
-        android:layout_height="50dp"
-        android:textColorHint="@color/contentBadgeTitle"
-        android:textColor="@color/bgContent"
-        android:hint="Enter a Movie!" />
-
     <ListView
         android:id="@+id/mainListView"
         android:layout_width="match_parent"
