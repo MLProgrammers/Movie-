@@ -188,6 +188,7 @@ public class Details extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 Intent i = new Intent(Details.this, MainActivity.class);
                 i.putExtra("search_movie", query);
+                i.putExtra("detailToMain", true);
                 startActivity(i);
                 return false;
             }

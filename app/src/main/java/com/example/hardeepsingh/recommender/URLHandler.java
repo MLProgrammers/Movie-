@@ -29,4 +29,10 @@ class URLHandler {
         String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
         return IMAGE_BASE_URL + size + path;
     }
+
+    String getSearchUrl(String movieName) {
+        String SEARCH_URL = "https://api.themoviedb.org/3/search/movie?api_key=" + API_KEY + "&language=en-US&query=";
+        String PAGE_ADULT = "&page=1&include_adult=false";
+        return SEARCH_URL + movieName.replaceAll(" ", "%20") + PAGE_ADULT;
+    }
 }

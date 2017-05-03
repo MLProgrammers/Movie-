@@ -51,10 +51,10 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         //Initialize Preferences
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         IntialSetup intialSetup = new IntialSetup(this);
+
 
         //Initialize Variable
         listView = (ListView) findViewById(R.id.mainListView);
@@ -69,41 +69,8 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-        //Get Data
-        final DatabaseAPI databaseApi = new DatabaseAPI();
-        databaseApi.makeRequest(urlHandler.getNowPopularUrl(), new ResponseInterface() {
-            @Override
-            public void onDataRecieved(String json) {
-                moviesList = databaseApi.parseMovies(json);
-
-                //Collect All Movie Ratings
-                for(final Movie m: moviesList) {
-                   databaseApi.makeRequest(urlHandler.getOmdbRatingUrl(m.getTitle()), new ResponseInterface() {
-                       @Override
-                       public void onDataRecieved(String json) {
-                           //Set Rating and Genre
-                           m.setRatings(databaseApi.parseRating(json));
-
-                       }
-                   });
-                    m.setGenreHash(databaseApi.parseGenre(prefs.getString("genre", null)));
-                }
-
-                //Set the list and Update
-                adapter = new FoldingCellListAdapter(MainActivity.this, moviesList);
-                listView.setAdapter(adapter);
-            }
-        });
-
-        //Floating Button Handling
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        //Get Now Playing Data
+        getData(urlHandler.getNowPopularUrl());
 
         //Navigation Bar Handling
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -138,6 +105,8 @@ public class MainActivity extends AppCompatActivity
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                getData(urlHandler.getSearchUrl(query));
+                searchView.clearFocus();
                 return false;
             }
 
@@ -148,6 +117,17 @@ public class MainActivity extends AppCompatActivity
                 return true;
             }
         });
+
+        //Get Intent
+        Intent i = getIntent();
+        boolean detailToMain = i.getBooleanExtra("detailToMain", false);
+        if(detailToMain) {
+            String searchQueryDetail = i.getStringExtra("search_movie");
+            searchView.setQuery(searchQueryDetail, true);
+            searchView.setIconified(false);
+            searchView.clearFocus();
+        }
+
         return true;
     }
 
@@ -157,23 +137,42 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
+        if (id == R.id.nav_setting) {
+            Toast.makeText(this, "Settings Page", Toast.LENGTH_SHORT).show();
+        } 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void getData(String url) {
+        //Get Data
+        final DatabaseAPI databaseApi = new DatabaseAPI();
+        databaseApi.makeRequest(url, new ResponseInterface() {
+            @Override
+            public void onDataRecieved(String json) {
+                moviesList.clear();
+                moviesList = databaseApi.parseMovies(json);
+
+                //Collect All Movie Ratings
+                for(final Movie m: moviesList) {
+                    databaseApi.makeRequest(urlHandler.getOmdbRatingUrl(m.getTitle()), new ResponseInterface() {
+                        @Override
+                        public void onDataRecieved(String json) {
+                            //Set Rating and Genre
+                            m.setRatings(databaseApi.parseRating(json));
+
+                        }
+                    });
+                    m.setGenreHash(databaseApi.parseGenre(prefs.getString("genre", null)));
+                }
+
+                //Set the list and Update
+                adapter = new FoldingCellListAdapter(MainActivity.this, moviesList);
+                listView.setAdapter(adapter);
+            }
+        });
     }
 
 }
