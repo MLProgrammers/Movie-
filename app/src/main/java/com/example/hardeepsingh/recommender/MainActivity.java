@@ -4,6 +4,9 @@ import android.app.SearchManager;
 import android.content.ClipData;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.media.MediaRouter;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -25,6 +28,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.ramotion.foldingcell.FoldingCell;
@@ -52,6 +56,10 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+//        RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+//        LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
+//        stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
 
         //Initialize Preferences
         prefs = PreferenceManager.getDefaultSharedPreferences(this);

@@ -9,6 +9,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+import android.media.Rating;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.graphics.Palette;
 import android.text.format.DateUtils;
@@ -19,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -92,6 +98,12 @@ public class FoldingCellListAdapter extends ArrayAdapter<Movie> {
 
             // binding unfolded view parts to view holder button
             viewHolder.moreDetailButton = (TextView) cell.findViewById(R.id.more_detail_button);
+
+            // binding unfolded rating bar
+            viewHolder.ratingBar = (RatingBar) cell.findViewById(R.id.ratingBar);
+            // bind folded rating bar
+            LayerDrawable stars = (LayerDrawable) viewHolder.ratingBar.getProgressDrawable();
+            stars.getDrawable(2).setColorFilter(getContext().getResources().getColor(R.color.bgContent), PorterDuff.Mode.SRC_ATOP);
             cell.setTag(viewHolder);
         } else {
             // for existing cell set valid valid state(without animation)
@@ -113,6 +125,10 @@ public class FoldingCellListAdapter extends ArrayAdapter<Movie> {
         viewHolder.fold_year.setText(dateSplit[1]);
         viewHolder.fold_name.setText(item.getTitle());
         viewHolder.fold_genre.setText(item.getGenreHash().values().toString());
+
+        double rating = item.getRatings() == null ? 0.0 : item.getRatings().get("Rotten Tomatoes") == null ? 0.0  : item.getRatings().get("Rotten Tomatoes") / 2;
+        float ratingValue = Float.parseFloat(Double.toString(rating));
+        viewHolder.ratingBar.setRating(ratingValue);
         viewHolder.fold_popularity.setText(String.format("%.2f", item.getPopularity()));
 
         // bind unfolded data from selected element to view through view holder
@@ -121,6 +137,8 @@ public class FoldingCellListAdapter extends ArrayAdapter<Movie> {
         viewHolder.unfold_genre.setText(item.getGenreHash().values().toString());
         viewHolder.unfold_date.setText(item.getReleaseDate());
         viewHolder.unfold_popularity.setText(item.getPopularity() + "");
+
+
 
         //Set Pallete Color and Image
         imageLoader.get(urlHandler.getImageUrl(item.getBackdropPath(), "w300"), new ImageLoader.ImageListener() {
@@ -135,6 +153,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Movie> {
                             int defaultColor = 0x000000;
                             viewHolder.fold_background.setBackgroundColor(palette.getVibrantColor(defaultColor));
                             viewHolder.unfold_background.setBackgroundColor(palette.getVibrantColor(defaultColor));
+
                         }
                     });
                 }
@@ -194,6 +213,9 @@ public class FoldingCellListAdapter extends ArrayAdapter<Movie> {
         TextView unfold_genre;
         TextView unfold_date;
         TextView unfold_popularity;
+
+        //Rating
+        RatingBar ratingBar;
 
         //Button
         TextView moreDetailButton;
