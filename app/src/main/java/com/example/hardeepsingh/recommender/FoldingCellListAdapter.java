@@ -34,7 +34,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 
 public class FoldingCellListAdapter extends ArrayAdapter<Movie> {
@@ -71,19 +73,18 @@ public class FoldingCellListAdapter extends ArrayAdapter<Movie> {
             viewHolder.fold_date_month = (TextView) cell.findViewById(R.id.fold_date_month);
             viewHolder.fold_year = (TextView) cell.findViewById(R.id.fold_year);
             viewHolder.fold_name = (TextView) cell.findViewById(R.id.fold_name);
-            viewHolder.fold_rating = (TextView) cell.findViewById(R.id.fold_rating);
             viewHolder.fold_genre = (TextView) cell.findViewById(R.id.fold_genre);
-            viewHolder.fold_collection = (TextView) cell.findViewById(R.id.fold_collection);
+            viewHolder.fold_popularity = (TextView) cell.findViewById(R.id.fold_popularity);
 
 
             // binding unfolded view parts to view holder
             viewHolder.unfold_top_name = (TextView) cell.findViewById(R.id.unfold_top_name);
             viewHolder.head_image = (ImageView) cell.findViewById(R.id.head_image);
             viewHolder.unfold_name = (TextView) cell.findViewById(R.id.unfold_name);
-            viewHolder.unfold_rating = (TextView) cell.findViewById(R.id.unfold_rating);
+//            viewHolder.unfold_rating = (TextView) cell.findViewById(R.id.unfold_rating);
             viewHolder.unfold_genre = (TextView) cell.findViewById(R.id.unfold_genre);
             viewHolder.unfold_date = (TextView) cell.findViewById(R.id.unfold_date);
-            viewHolder.unfold_collection = (TextView) cell.findViewById(R.id.unfold_collection);
+            viewHolder.unfold_popularity = (TextView) cell.findViewById(R.id.unfold_popularity);
 
             // binding fold/unfold relative view to view holder
             viewHolder.fold_background = (RelativeLayout) cell.findViewById(R.id.fold_background);
@@ -112,16 +113,14 @@ public class FoldingCellListAdapter extends ArrayAdapter<Movie> {
         viewHolder.fold_year.setText(dateSplit[1]);
         viewHolder.fold_name.setText(item.getTitle());
         viewHolder.fold_genre.setText(item.getGenreHash().values().toString());
-        viewHolder.fold_rating.setText("PG - 12");
-        viewHolder.fold_collection.setText("$300 MIL");
+        viewHolder.fold_popularity.setText(String.format("%.2f", item.getPopularity()));
 
         // bind unfolded data from selected element to view through view holder
         viewHolder.unfold_top_name.setText(item.getTitle().toUpperCase().substring(0,1));
         viewHolder.unfold_name.setText(item.getTitle());
-        viewHolder.unfold_rating.setText("PG - 12");
         viewHolder.unfold_genre.setText(item.getGenreHash().values().toString());
         viewHolder.unfold_date.setText(item.getReleaseDate());
-        viewHolder.unfold_collection.setText("$300 MIL");
+        viewHolder.unfold_popularity.setText(item.getPopularity() + "");
 
         //Set Pallete Color and Image
         imageLoader.get(urlHandler.getImageUrl(item.getBackdropPath(), "w300"), new ImageLoader.ImageListener() {
@@ -185,8 +184,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Movie> {
         TextView fold_year;
         TextView fold_name;
         TextView fold_genre;
-        TextView fold_rating;
-        TextView fold_collection;
+        TextView fold_popularity;
 
         //Unfolded
         TextView unfold_top_name;
@@ -195,7 +193,7 @@ public class FoldingCellListAdapter extends ArrayAdapter<Movie> {
         TextView unfold_rating;
         TextView unfold_genre;
         TextView unfold_date;
-        TextView unfold_collection;
+        TextView unfold_popularity;
 
         //Button
         TextView moreDetailButton;

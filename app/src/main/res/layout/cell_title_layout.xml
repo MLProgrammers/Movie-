@@ -36,12 +36,12 @@
             android:id="@+id/fold_date_month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:gravity="center"
             android:text="March, 23"
             android:textColor="@android:color/white"
-            android:textSize="14sp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/fold_year"
@@ -73,15 +73,15 @@
             android:id="@+id/fold_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
             android:layout_marginTop="-5dp"
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
             android:maxLines="1"
             android:text="Movie Name"
             android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true" />
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/title_from_to_dots_divider"
@@ -99,34 +99,28 @@
             android:layout_below="@id/title_from_to_dots_divider"
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
-            android:maxLines="1"
+            android:maxLines="2"
             android:text="Adventure, Action"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true" />
-
-
-        <TextView
-            android:id="@+id/fold_rating"
-            style="@style/TitleBadgeText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:text="Rating" />
+            android:layout_above="@+id/textView3" />
 
         <TextView
             style="@style/TitleBadgeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/fold_rating"
-            android:layout_alignStart="@id/fold_rating"
-            android:text="Rating"
-            android:id="@+id/textView2" />
+            android:layout_above="@+id/fold_popularity"
+            android:layout_alignParentEnd="true"
+            android:layout_alignStart="@+id/fold_popularity"
+            android:gravity="right"
+            android:text="Popularity"
+            android:id="@+id/textView3" />
+
 
         <TextView
-            android:id="@+id/fold_collection"
+            android:id="@+id/fold_popularity"
             style="@style/TitleBadgeText"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
@@ -134,16 +128,6 @@
             android:layout_alignParentEnd="true"
             android:gravity="right"
             android:text="$300 Million" />
-
-        <TextView
-            style="@style/TitleBadgeTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/fold_collection"
-            android:layout_alignParentEnd="true"
-            android:layout_alignStart="@+id/fold_collection"
-            android:gravity="right"
-            android:text="Collection" />
 
     </RelativeLayout>
 </LinearLayout>
