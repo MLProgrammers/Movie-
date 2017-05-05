@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.media.MediaRouter;
+import android.media.audiofx.BassBoost;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -57,14 +58,12 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
-//        LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
-//        stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
-
         //Initialize Preferences
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         IntialSetup intialSetup = new IntialSetup(this);
 
+        Toast.makeText(this, prefs.getString("rating_minimum", "Any"), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, prefs.getString("rating_source", "Any"), Toast.LENGTH_SHORT).show();
 
         //Initialize Variable
         listView = (ListView) findViewById(R.id.mainListView);
@@ -148,7 +147,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_setting) {
-            Toast.makeText(this, "Settings Page", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(MainActivity.this, Settings.class);
+            startActivity(i);
         } 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
