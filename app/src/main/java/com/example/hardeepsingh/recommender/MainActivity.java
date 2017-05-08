@@ -62,8 +62,6 @@ public class MainActivity extends AppCompatActivity
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         IntialSetup intialSetup = new IntialSetup(this);
 
-        Toast.makeText(this, prefs.getString("rating_minimum", "Any"), Toast.LENGTH_SHORT).show();
-        Toast.makeText(this, prefs.getString("rating_source", "Any"), Toast.LENGTH_SHORT).show();
 
         //Initialize Variable
         listView = (ListView) findViewById(R.id.mainListView);

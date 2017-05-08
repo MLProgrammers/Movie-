@@ -234,6 +234,10 @@ public class Movie implements Serializable {
             for (String key : ratings.keySet()) {
                 String value = ratings.get(key).replaceAll("\"", "").trim();
                 key = key.replaceAll("\"", "").trim();
+
+                // Rename to Internet Movie Database to IMDB
+                if(key.equalsIgnoreCase("Internet Movie Database")) key = "IMDB";
+
                 if (value.endsWith("%")) {
                     dRating.put(key, Double.parseDouble(value.replace("%", "")) / 10);
                 } else if (value.endsWith("/100")) {
@@ -246,7 +250,7 @@ public class Movie implements Serializable {
             //Add the theMovieDB Rating to the list
             String rValue = String.valueOf(getVoteAverage());
             if (!rValue.isEmpty()) {
-                dRating.put("API Movie Database", getVoteAverage());
+                dRating.put("TMDB", getVoteAverage());
             }
         }
         this.Ratings = dRating;

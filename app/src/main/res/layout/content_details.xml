@@ -225,7 +225,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:gravity="left"
-                            android:text="Movie DB: "
+                            android:text="TMDB: "
                             android:textSize="15sp"
                             android:typeface="serif" />
 

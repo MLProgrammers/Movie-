@@ -133,9 +133,6 @@ public class Details extends AppCompatActivity {
                         Window window = getWindow();
                         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                         window.setStatusBarColor(color);
-
-                        //Change Background Color of ScrollView
-                        //coordinatorLayout.setBackgroundColor(color);
                     }
                 });
             }
@@ -167,6 +164,29 @@ public class Details extends AppCompatActivity {
             }
         });
     }
+
+//    public ArrayList<Movie> handleUserPreferences(ArrayList<Movie> original) {
+//        ArrayList<Movie> result = new ArrayList<>();
+//        String ratingMinimum = prefs.getString("rating_minimum", "Any");
+//        String ratingSource = prefs.getString("rating_source", "Any");
+//
+//        // If both 'Any' then return original
+//        if(ratingSource.equalsIgnoreCase("Any") && ratingMinimum.equalsIgnoreCase("Any")) {
+//            return original;
+//        } else if(!ratingSource.equalsIgnoreCase("Any") && !ratingMinimum.equalsIgnoreCase("Any")){
+//            System.out.println("**************here");
+//            for (Movie m : original) {
+//                if(m.getRatings() != null) {
+////                    if (m.getRatings().get(ratingSource) > Integer.parseInt(ratingMinimum.substring(1, ratingMinimum.length()))) {
+////                        System.out.println("**************" + ratingSource + "  |  " + m.getRatings().get(ratingSource) + " > " + Integer.parseInt(ratingMinimum.substring(1, ratingMinimum.length())));
+////                    }
+//                    System.out.println("**************there");
+//
+//                }
+//            }
+//        }
+//        return original;
+//    }
 
     @Override
     public void onBackPressed() {
@@ -202,25 +222,25 @@ public class Details extends AppCompatActivity {
     }
 
     public void handleGenreFormat() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder builder = new StringBuilder();
         Iterator<Map.Entry<Integer, String>> entryIterator = movie.getGenreHash().entrySet().iterator();
         while (entryIterator.hasNext()) {
             Map.Entry<Integer, String> entry = entryIterator.next();
-            buffer.append(entry.getValue());
+            builder.append(entry.getValue());
             if (entryIterator.hasNext()) {
-                buffer.append("\n");
+                builder.append("\n");
             }
         }
-        detail_genre.setText(buffer.toString());
+        detail_genre.setText(builder.toString());
     }
 
     public void handleRatingFormat() {
         for (Map.Entry<String, Double> r : movie.getRatings().entrySet()) {
             switch (r.getKey()) {
-                case "API Movie Database":
+                case "TMDB":
                     detail_db_rating.setText(Double.toString(r.getValue()));
                     break;
-                case "Internet Movie Database":
+                case "IMDB":
                     detail_imdb_rating.setText(Double.toString(r.getValue()));
                     break;
                 case "Rotten Tomatoes":

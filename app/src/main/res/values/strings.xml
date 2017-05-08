@@ -11,17 +11,18 @@
 
     <string-array name="ratings_value">
         <item>Any</item>
-        <item>>4</item>
-        <item>>3</item>
-        <item>>2</item>
-        <item>>1</item>
+        <item>>9</item>
+        <item>>8</item>
+        <item>>7</item>
+        <item>>6</item>
+        <item>>5</item>
     </string-array>
 
     <string-array name="ratings_from">
         <item>Any</item>
         <item>IMDB</item>
-        <item>Rotten Tomatos</item>
-        <item>Matacritic</item>
+        <item>Rotten Tomatoes</item>
+        <item>Metacritic</item>
         <item>TMDB</item>
     </string-array>
 </resources>
