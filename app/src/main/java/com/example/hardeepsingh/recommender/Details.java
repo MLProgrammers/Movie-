@@ -159,34 +159,14 @@ public class Details extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out " + movie.getTitle() + " with ratings " + movie.getRatings());
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
             }
         });
     }
-
-//    public ArrayList<Movie> handleUserPreferences(ArrayList<Movie> original) {
-//        ArrayList<Movie> result = new ArrayList<>();
-//        String ratingMinimum = prefs.getString("rating_minimum", "Any");
-//        String ratingSource = prefs.getString("rating_source", "Any");
-//
-//        // If both 'Any' then return original
-//        if(ratingSource.equalsIgnoreCase("Any") && ratingMinimum.equalsIgnoreCase("Any")) {
-//            return original;
-//        } else if(!ratingSource.equalsIgnoreCase("Any") && !ratingMinimum.equalsIgnoreCase("Any")){
-//            System.out.println("**************here");
-//            for (Movie m : original) {
-//                if(m.getRatings() != null) {
-////                    if (m.getRatings().get(ratingSource) > Integer.parseInt(ratingMinimum.substring(1, ratingMinimum.length()))) {
-////                        System.out.println("**************" + ratingSource + "  |  " + m.getRatings().get(ratingSource) + " > " + Integer.parseInt(ratingMinimum.substring(1, ratingMinimum.length())));
-////                    }
-//                    System.out.println("**************there");
-//
-//                }
-//            }
-//        }
-//        return original;
-//    }
 
     @Override
     public void onBackPressed() {
