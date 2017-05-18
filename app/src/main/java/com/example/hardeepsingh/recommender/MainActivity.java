@@ -147,7 +147,11 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_setting) {
             Intent i = new Intent(MainActivity.this, Settings.class);
             startActivity(i);
-        } 
+        } else if(id == R.id.nav_now_playing) {
+            getData(urlHandler.getNowPopularUrl());
+        } else if(id == R.id.nav_top_rated) {
+            getData(urlHandler.getTopRatedUrl());
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
