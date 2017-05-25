@@ -144,14 +144,15 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_setting) {
-            Intent i = new Intent(MainActivity.this, Settings.class);
-            startActivity(i);
-        } else if(id == R.id.nav_now_playing) {
+        if(id == R.id.nav_now_playing) {
             getData(urlHandler.getNowPopularUrl());
         } else if(id == R.id.nav_top_rated) {
             getData(urlHandler.getTopRatedUrl());
         }
+//        else if (id == R.id.nav_setting) {
+//            Intent i = new Intent(MainActivity.this, Settings.class);
+//            startActivity(i);
+//        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
