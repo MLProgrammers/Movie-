@@ -59,7 +59,7 @@ public class Details extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //Get Intent, Preferences and API
-        Intent i  = getIntent();
+        Intent i = getIntent();
         movie = (Movie) i.getSerializableExtra("movie");
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         databaseAPI = new DatabaseAPI();
@@ -88,7 +88,7 @@ public class Details extends AppCompatActivity {
         detail_description.setText(movie.getOverview());
 
         //Get Ratings
-        if(movie.getRatings() == null) {
+        if (movie.getRatings() == null) {
             databaseAPI.makeRequest(urlHandler.getOmdbRatingUrl(movie.getTitle()), new ResponseInterface() {
                 @Override
                 public void onDataRecieved(String json) {
@@ -101,7 +101,7 @@ public class Details extends AppCompatActivity {
         }
 
         //Getting Genre Single Line Separated
-        if(movie.getGenreHash() == null) {
+        if (movie.getGenreHash() == null) {
             databaseAPI.makeRequest(urlHandler.getOmdbRatingUrl(movie.getTitle()), new ResponseInterface() {
                 @Override
                 public void onDataRecieved(String json) {
@@ -136,6 +136,7 @@ public class Details extends AppCompatActivity {
                     }
                 });
             }
+
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.e("Detail Image Error: ", error.getMessage());
@@ -215,6 +216,7 @@ public class Details extends AppCompatActivity {
     }
 
     public void handleRatingFormat() {
+        String notAvaliable = "N/A";
         for (Map.Entry<String, Double> r : movie.getRatings().entrySet()) {
             switch (r.getKey()) {
                 case "TMDB":

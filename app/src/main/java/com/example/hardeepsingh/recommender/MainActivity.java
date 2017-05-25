@@ -170,12 +170,12 @@ public class MainActivity extends AppCompatActivity
 
                 //Collect All Movie Ratings
                 for(final Movie m: moviesList) {
+                    System.out.println(urlHandler.getOmdbRatingUrl(m.getTitle()));
                     databaseApi.makeRequest(urlHandler.getOmdbRatingUrl(m.getTitle()), new ResponseInterface() {
                         @Override
                         public void onDataRecieved(String json) {
                             //Set Rating and Genre
                             m.setRatings(databaseApi.parseRating(json));
-
                         }
                     });
                     m.setGenreHash(databaseApi.parseGenre(prefs.getString("genre", null)));

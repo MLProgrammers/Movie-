@@ -25,4 +25,6 @@
         <item>Metacritic</item>
         <item>TMDB</item>
     </string-array>
+
+    <string name="title_activity_welcome">Recommender</string>
 </resources>
