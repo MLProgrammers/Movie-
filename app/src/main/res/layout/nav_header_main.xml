@@ -17,13 +17,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Recommender"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:text="мσνιє+"
+        android:textSize="25dp" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="It knows what you like ;)" />
+        android:text="ᵒᶰᵉ ᵖˡᵃᶜᵉ ᶠᵒʳ ʳᵃᵗᶤᶰᵍˢ ᵃᶰᵈ ʳᵉᶜᵒᵐᵐᵉᶰᵈᵃᵗᶤᵒᶰˢ"
+        android:textSize="15dp" />
 
 </LinearLayout>
