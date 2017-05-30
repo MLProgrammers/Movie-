@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     @Override
@@ -170,12 +171,12 @@ public class MainActivity extends AppCompatActivity
 
                 //Collect All Movie Ratings
                 for(final Movie m: moviesList) {
-                    System.out.println(urlHandler.getOmdbRatingUrl(m.getTitle()));
                     databaseApi.makeRequest(urlHandler.getOmdbRatingUrl(m.getTitle()), new ResponseInterface() {
                         @Override
                         public void onDataRecieved(String json) {
                             //Set Rating and Genre
                             m.setRatings(databaseApi.parseRating(json));
+                            adapter.notifyDataSetChanged();
                         }
                     });
                     m.setGenreHash(databaseApi.parseGenre(prefs.getString("genre", null)));
@@ -184,6 +185,7 @@ public class MainActivity extends AppCompatActivity
                 //Set the list and Update
                 adapter = new FoldingCellListAdapter(MainActivity.this, moviesList);
                 listView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
         });
     }
