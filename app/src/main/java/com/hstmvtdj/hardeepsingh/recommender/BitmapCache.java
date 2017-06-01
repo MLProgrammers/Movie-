@@ -1,4 +1,4 @@
-package com.example.hardeepsingh.recommender;
+package com.hstmvtdj.hardeepsingh.recommender;
 
 import com.android.volley.toolbox.ImageLoader.ImageCache;
 

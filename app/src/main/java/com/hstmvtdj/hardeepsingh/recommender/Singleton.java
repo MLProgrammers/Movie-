@@ -1,4 +1,4 @@
-package com.example.hardeepsingh.recommender;
+package com.hstmvtdj.hardeepsingh.recommender;
 
 import android.app.Application;
 import android.text.TextUtils;

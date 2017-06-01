@@ -9,7 +9,7 @@
     android:background="@drawable/deepspace"
     android:fitsSystemWindows="true"
     android:id="@+id/cordinator_layout"
-    tools:context="com.example.hardeepsingh.recommender.Details">
+    tools:context="com.hstmvtdj.hardeepsingh.recommender.Details">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"

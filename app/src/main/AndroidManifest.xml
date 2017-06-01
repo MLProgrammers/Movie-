@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.hardeepsingh.recommender">
+    package="com.hstmvtdj.hardeepsingh.recommender">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".Singleton"
+        android:name="com.hstmvtdj.hardeepsingh.recommender.Singleton"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.hstmvtdj.hardeepsingh.recommender.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".Details"
+            android:name="com.hstmvtdj.hardeepsingh.recommender.Details"
             android:label="@string/title_activity_details"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Settings" />
+        <activity android:name="com.hstmvtdj.hardeepsingh.recommender.Settings" />
         <activity
-            android:name=".Welcome"
+            android:name="com.hstmvtdj.hardeepsingh.recommender.Welcome"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_welcome"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">

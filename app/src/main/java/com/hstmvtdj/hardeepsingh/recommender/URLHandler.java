@@ -1,4 +1,4 @@
-package com.example.hardeepsingh.recommender;
+package com.hstmvtdj.hardeepsingh.recommender;
 
 /**
  * Created by hardeepsingh on 4/29/17.
